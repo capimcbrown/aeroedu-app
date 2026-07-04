@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b1220;
+  --foreground: #edeae2;
+  --panel: #111c2e;
+  --panel-border: #253347;
+  --steel: #3a4a5c;
+  --brass: #c9962c;
+  --brass-soft: #e0b563;
+  --alert: #b5432f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-panel: var(--panel);
+  --color-panel-border: var(--panel-border);
+  --color-steel: var(--steel);
+  --color-brass: var(--brass);
+  --color-brass-soft: var(--brass-soft);
+  --color-alert: var(--alert);
+  --font-display: "Space Grotesk", "Avenir Next", "Segoe UI", system-ui,
+    sans-serif;
+  --font-sans: "IBM Plex Sans", "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", "Menlo", monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+.heading-tick {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--panel-border) 0,
+    var(--panel-border) 1px,
+    transparent 1px,
+    transparent 40px
+  );
+}
