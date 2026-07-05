@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 // ── Reemplaza esta URL por la tuya de Formspree (ver instrucciones) ──
 const FORM_ENDPOINT = "https://formspree.io/f/xaqgvnee";
+const PASSING_SCORE = 80; // nota mínima sobre 100 para aprobar
 
 type Question = {
   id: number;
@@ -592,6 +593,31 @@ export default function TestAerodinamica() {
       setSelected(null);
     } else {
       setStep("done");
+      submitResult(score);
+    }
+  }
+
+  async function submitResult(finalScore: number) {
+    const percentage = Math.round((finalScore / QUESTIONS.length) * 100);
+    const passed = percentage >= PASSING_SCORE;
+    try {
+      await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          nombre: name,
+          email: email,
+          whatsapp: whatsapp,
+          test: "Aerodinámica TCP",
+          tipo: "Resultado final",
+          correctas: `${finalScore} / ${QUESTIONS.length}`,
+          nota_sobre_100: percentage,
+          resultado: passed ? "APROBADO" : "NO APROBADO",
+          fecha: new Date().toISOString(),
+        }),
+      });
+    } catch {
+      // Si falla el envío, igual se muestra el resultado en pantalla.
     }
   }
 
@@ -601,6 +627,7 @@ export default function TestAerodinamica() {
     setScore(0);
     setStep("quiz");
   }
+
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -745,25 +772,41 @@ export default function TestAerodinamica() {
           </div>
         )}
 
-        {step === "done" && (
-          <div className="text-center">
-            <p className="font-mono text-xs tracking-[0.3em] text-brass">
-              RESULTADO FINAL
-            </p>
-            <h2 className="mt-3 font-display text-4xl font-semibold">
-              {score} / {QUESTIONS.length}
-            </h2>
-            <p className="mt-2 text-sm text-foreground/70">
-              {Math.round((score / QUESTIONS.length) * 100)}% de respuestas correctas
-            </p>
-            <button
-              onClick={handleRestart}
-              className="mt-8 rounded-sm border border-brass/60 px-6 py-3 font-mono text-sm tracking-wide text-brass-soft transition-colors hover:bg-brass/10"
-            >
-              Volver a intentar
-            </button>
-          </div>
-        )}
+        {step === "done" && (() => {
+          const percentage = Math.round((score / QUESTIONS.length) * 100);
+          const passed = percentage >= PASSING_SCORE;
+          return (
+            <div className="text-center">
+              <p className="font-mono text-xs tracking-[0.3em] text-brass">
+                RESULTADO FINAL
+              </p>
+              <h2 className="mt-3 font-display text-5xl font-semibold">
+                {percentage}<span className="text-2xl text-foreground/50">/100</span>
+              </h2>
+              <p className="mt-2 text-sm text-foreground/70">
+                {score} de {QUESTIONS.length} respuestas correctas
+              </p>
+              <span
+                className={`mt-5 inline-block rounded-sm border px-4 py-2 font-mono text-sm tracking-wide ${
+                  passed
+                    ? "border-green-500/60 bg-green-500/10 text-green-500"
+                    : "border-alert/60 bg-alert/10 text-alert"
+                }`}
+              >
+                {passed ? "✓ APROBADO" : "✗ NO APROBADO"} — mínimo para pasar: {PASSING_SCORE}/100
+              </span>
+              <p className="mt-4 text-xs text-foreground/50">
+                Tu resultado ya fue enviado por correo.
+              </p>
+              <button
+                onClick={handleRestart}
+                className="mt-8 rounded-sm border border-brass/60 px-6 py-3 font-mono text-sm tracking-wide text-brass-soft transition-colors hover:bg-brass/10"
+              >
+                Volver a intentar
+              </button>
+            </div>
+          );
+        })()}
       </main>
     </div>
   );
