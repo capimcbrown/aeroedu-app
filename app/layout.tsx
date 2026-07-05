@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Bitácora Aérea | Formación para el gremio aeronáutico",
+  title: "@capimcbrown | Formación para el gremio aeronáutico",
   description:
     "Educación digital para pilotos, tripulantes de cabina y despachadores, con pedagogía diseñada para una mejor comprensión.",
 };
