@@ -162,10 +162,12 @@ export default function Home() {
               </p>
             </div>
             
-              href="mailto:contacto@ejemplo.com"
+              href="https://wa.me/573167446685?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20los%20programas%20de%20formaci%C3%B3n."
+              target="_blank"
+              rel="noopener noreferrer"
               className="shrink-0 rounded-sm bg-brass px-6 py-3 font-medium text-background transition-colors hover:bg-brass-soft"
             >
-              Escribir ahora
+              Escribir por WhatsApp
             </a>
           </div>
         </section>
