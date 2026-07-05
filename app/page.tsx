@@ -63,13 +63,13 @@ export default function Home() {
               bajo presión real.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
-              <a
+              
                 href="#programas"
                 className="rounded-sm bg-brass px-6 py-3 font-medium text-background transition-colors hover:bg-brass-soft"
               >
                 Ver programas
               </a>
-              <a
+              
                 href="#metodologia"
                 className="font-mono text-sm tracking-wide text-foreground/70 underline decoration-steel underline-offset-4 transition-colors hover:text-brass-soft"
               >
@@ -161,7 +161,7 @@ export default function Home() {
                 programa correcto.
               </p>
             </div>
-            <a
+            
               href="mailto:contacto@ejemplo.com"
               className="shrink-0 rounded-sm bg-brass px-6 py-3 font-medium text-background transition-colors hover:bg-brass-soft"
             >
@@ -173,7 +173,7 @@ export default function Home() {
 
       <footer className="border-t border-panel-border px-6 py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-xs text-foreground/40 sm:flex-row">
-          <span className="font-mono">BTC · AER — Bitácora Aérea</span>
+          <span className="font-mono">@capimcbrown</span>
           <span>Educación digital para el gremio aeronáutico</span>
         </div>
       </footer>
