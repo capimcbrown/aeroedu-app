@@ -16,7 +16,7 @@ export default function HeadingTape() {
     <header className="sticky top-0 z-50 border-b border-panel-border bg-background/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-6 px-6 py-4">
         <span className="font-display text-sm font-semibold tracking-[0.2em] text-brass-soft">
-          BTC · AER
+          @capimcbrown
         </span>
 
         <nav
