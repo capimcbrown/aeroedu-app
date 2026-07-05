@@ -63,13 +63,13 @@ export default function Home() {
               bajo presión real.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
-              
+              <a
                 href="#programas"
                 className="rounded-sm bg-brass px-6 py-3 font-medium text-background transition-colors hover:bg-brass-soft"
               >
                 Ver programas
               </a>
-              
+              <a
                 href="#metodologia"
                 className="font-mono text-sm tracking-wide text-foreground/70 underline decoration-steel underline-offset-4 transition-colors hover:text-brass-soft"
               >
@@ -161,7 +161,7 @@ export default function Home() {
                 programa correcto.
               </p>
             </div>
-            
+            <a
               href="https://wa.me/573167446685?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20los%20programas%20de%20formaci%C3%B3n."
               target="_blank"
               rel="noopener noreferrer"
