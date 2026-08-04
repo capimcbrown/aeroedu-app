@@ -100,9 +100,11 @@ export async function connectVoice(
 
   // const player = new AgentPlayer();  // Deshabilitado: solo texto por ahora
   const mic = new AgentMicrophone((data) => session.sendAudio(data));
-  session.on("audio", (chunk) => player.queue(chunk));
-  session.on("user-started-speaking", () => {
-    player.interrupt();
+  // session.on("audio", (chunk) => player.queue(chunk));  // Deshabilitado
+// player.interrupt();  // Deshabilitado
+  // session.on("audio", (chunk) => player.queue(chunk));  // Deshabilitado
+// player.interrupt();  // Deshabilitado
+    // player.interrupt();  // Deshabilitado
     onStateChange?.("listening");
   });
   session.on("agent-thinking", () => onStateChange?.("agent-thinking"));
