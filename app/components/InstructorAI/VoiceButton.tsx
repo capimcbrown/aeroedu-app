@@ -1,34 +1,71 @@
 "use client";
 
 import { useState } from "react";
-import { connectVoice, disconnectVoice } from "../../services/instructorAI";
+import {
+  connectVoice,
+  disconnectVoice,
+  type VoiceState,
+  type VoiceController,
+  type ChatRole,
+} from "../../services/instructorAI";
 
-export default function VoiceButton() {
-  const [showNotice, setShowNotice] = useState(false);
-  const [active, setActive] = useState(false);
+interface VoiceButtonProps {
+  onTranscript?: (role: ChatRole, content: string) => void;
+}
 
-  function handleClick() {
-    if (active) {
+const STATE_LABEL: Record<VoiceState, string> = {
+  idle: "",
+  connecting: "Conectando…",
+  listening: "Escuchando…",
+  "agent-thinking": "Pensando…",
+  "agent-speaking": "Hablando…",
+  error: "Hubo un problema con la voz. Intenta de nuevo.",
+};
+
+export default function VoiceButton({ onTranscript }: VoiceButtonProps) {
+  const [state, setState] = useState<VoiceState>("idle");
+  const [, setController] = useState<VoiceController | null>(null);
+
+  const isActive = state !== "idle" && state !== "error";
+
+  async function handleClick() {
+    if (isActive) {
       disconnectVoice();
-      setActive(false);
-    } else {
-      connectVoice();
-      setActive(true);
+      setController(null);
+      setState("idle");
+      return;
     }
-    setShowNotice(true);
-    window.setTimeout(() => setShowNotice(false), 3200);
+
+    try {
+      const ctrl = await connectVoice({
+        onStateChange: setState,
+        onTranscript,
+        onError: () => setState("error"),
+      });
+      setController(ctrl);
+    } catch {
+      setState("error");
+    }
   }
+
+  const label = STATE_LABEL[state];
 
   return (
     <div className="relative">
       <button
         type="button"
         onClick={handleClick}
-        aria-label="Hablar por voz con el Instructor IA"
+        aria-label={
+          isActive
+            ? "Terminar conversación por voz"
+            : "Hablar por voz con el Instructor IA"
+        }
         className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-colors ${
-          active
-            ? "border-brass bg-brass/10 text-brass"
-            : "border-panel-border bg-panel text-foreground/60 hover:border-brass/50 hover:text-brass-soft"
+          state === "error"
+            ? "border-alert/60 bg-alert/10 text-alert"
+            : isActive
+              ? "animate-pulse border-brass bg-brass/10 text-brass"
+              : "border-panel-border bg-panel text-foreground/60 hover:border-brass/50 hover:text-brass-soft"
         }`}
       >
         <svg
@@ -47,9 +84,9 @@ export default function VoiceButton() {
         </svg>
       </button>
 
-      {showNotice && (
+      {label && (
         <div className="absolute bottom-14 right-0 w-56 rounded-sm border border-panel-border bg-panel px-3 py-2 text-xs leading-relaxed text-foreground/80 shadow-lg">
-          Próximamente podrás hablar por voz con el Instructor IA.
+          {label}
         </div>
       )}
     </div>

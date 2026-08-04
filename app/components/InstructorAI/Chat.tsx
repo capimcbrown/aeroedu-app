@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { sendMessage, type ChatMessage } from "../../services/instructorAI";
+import {
+  sendMessage,
+  type ChatMessage,
+  type ChatRole,
+} from "../../services/instructorAI";
 import SuggestedQuestions from "./SuggestedQuestions";
 import VoiceButton from "./VoiceButton";
 
@@ -50,6 +54,14 @@ export default function Chat() {
       },
     ]);
     setIsTyping(false);
+  }
+
+  function handleVoiceTranscript(role: ChatRole, content: string) {
+    if (!content.trim()) return;
+    setMessages((prev) => [
+      ...prev,
+      { id: makeId(), role, content, createdAt: Date.now() },
+    ]);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -109,7 +121,7 @@ export default function Chat() {
             placeholder="Escribe tu pregunta sobre aviación..."
             className="max-h-32 flex-1 resize-none rounded-sm border border-panel-border bg-panel px-4 py-3 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brass"
           />
-          <VoiceButton />
+          <VoiceButton onTranscript={handleVoiceTranscript} />
           <button
             type="button"
             onClick={() => handleSend()}
