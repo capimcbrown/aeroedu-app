@@ -99,12 +99,7 @@ export async function connectVoice(
   });
 
   const player = new AgentPlayer();
-  const mic = new AgentMicrophone({
-  echoCancellation: true,
-  noiseSuppression: true,
-  autoGainControl: true
-}, (data) => session.sendAudio(data));
-
+  const mic = new AgentMicrophone((data) => session.sendAudio(data));
   session.on("audio", (chunk) => player.queue(chunk));
   session.on("user-started-speaking", () => {
     player.interrupt();
