@@ -3,20 +3,18 @@
  *
  * Capa de servicio para el Instructor IA de CapiMcBrown.
  *
- * FASE ACTUAL: todas las funciones devuelven respuestas simuladas.
- * No hay ninguna conexión real a un proveedor de IA todavía.
+ * TEXTO (sendMessage): sigue simulado por ahora — no cambia en esta fase.
+ * VOZ (connectVoice / disconnectVoice / streamAudio): ya está conectada de
+ * verdad a Deepgram Voice Agent, usando el SDK oficial @deepgram/agents.
  *
- * PREPARADO PARA CONECTAR MÁS ADELANTE:
- *  - Deepgram   (voz: reconocimiento y síntesis de voz en tiempo real)
- *  - Gemini     (LLM de Google)
- *  - Claude     (LLM de Anthropic)
- *  - OpenAI     (LLM de OpenAI)
- *  - Base de conocimiento propia (ebooks, PDFs y cursos de @capimcbrown)
- *
- * Cuando se conecte un proveedor real, solo hay que reemplazar el cuerpo
- * de estas funciones — el resto de la interfaz (Chat.tsx, VoiceButton.tsx,
- * InstructorDrawer.tsx) no necesita cambiar.
+ * La clave real de Deepgram vive únicamente en el servidor (variable de
+ * entorno DEEPGRAM_API_KEY en Vercel) y nunca llega al navegador. El
+ * navegador solo recibe tokens temporales de 60 segundos generados por
+ * app/api/deepgram-token/route.ts.
  */
+
+import { AgentSession, AgentMicrophone, AgentPlayer } from "@deepgram/agents";
+import { INSTRUCTOR_PROMPT, INSTRUCTOR_GREETING } from "./aerodinamicaPrompt";
 
 export type ChatRole = "user" | "assistant";
 
@@ -32,14 +30,7 @@ const SIMULATED_REPLY =
 
 /**
  * Envía un mensaje de texto al Instructor IA y devuelve su respuesta.
- *
- * TODO (fase de conexión real): reemplazar por una llamada a la API route
- * correspondiente, por ejemplo:
- *   const res = await fetch("/api/instructor-ai/chat", {
- *     method: "POST",
- *     body: JSON.stringify({ message, history }),
- *   });
- *   return (await res.json()).reply;
+ * Fase de texto: todavía simulado (no conectado a un LLM de texto).
  */
 export async function sendMessage(
   message: string,
@@ -47,39 +38,128 @@ export async function sendMessage(
 ): Promise<string> {
   void message;
   void history;
-
-  // Simula latencia de red / generación del modelo.
   await new Promise((resolve) => setTimeout(resolve, 900));
-
   return SIMULATED_REPLY;
 }
 
+export type VoiceState =
+  | "idle"
+  | "connecting"
+  | "listening"
+  | "agent-thinking"
+  | "agent-speaking"
+  | "error";
+
+export interface VoiceCallbacks {
+  onStateChange?: (state: VoiceState) => void;
+  onTranscript?: (role: ChatRole, content: string) => void;
+  onError?: (message: string) => void;
+}
+
+export interface VoiceController {
+  disconnect: () => void;
+  mute: () => void;
+  unmute: () => void;
+}
+
+let activeSession: AgentSession | null = null;
+let activeMic: AgentMicrophone | null = null;
+let activePlayer: AgentPlayer | null = null;
+
 /**
- * Inicia una sesión de voz en tiempo real.
- *
- * TODO (fase de conexión real): abrir un WebSocket contra el Deepgram
- * Voice Agent (o equivalente) y comenzar a transmitir audio del micrófono.
+ * Abre una sesión de voz en tiempo real contra Deepgram Voice Agent:
+ * captura el micrófono, transmite el audio, reproduce la respuesta hablada
+ * del agente, y reporta el estado y la transcripción a través de callbacks.
  */
-export function connectVoice(): void {
-  // Sin implementar todavía. Reservado para la integración con Deepgram.
+export async function connectVoice(
+  callbacks: VoiceCallbacks = {}
+): Promise<VoiceController> {
+  const { onStateChange, onTranscript, onError } = callbacks;
+
+  onStateChange?.("connecting");
+
+  const session = new AgentSession({
+    auth: {
+      tokenFactory: () => fetch("/api/deepgram-token").then((r) => r.text()),
+    },
+    agent: {
+      language: "es",
+      greeting: INSTRUCTOR_GREETING,
+      listen: {
+        provider: { version: "v1", type: "deepgram", model: "nova-3", language: "es" },
+      },
+      think: {
+        provider: { type: "google", model: "gemini-3.1-flash-lite" },
+        prompt: INSTRUCTOR_PROMPT,
+      },
+      speak: {
+        provider: { type: "deepgram", model: "aura-2-celeste-es" },
+      },
+    },
+  });
+
+  const player = new AgentPlayer();
+  const mic = new AgentMicrophone((data) => session.sendAudio(data));
+
+  session.on("audio", (chunk) => player.queue(chunk));
+  session.on("user-started-speaking", () => {
+    player.interrupt();
+    onStateChange?.("listening");
+  });
+  session.on("agent-thinking", () => onStateChange?.("agent-thinking"));
+  session.on("agent-started-speaking", () => onStateChange?.("agent-speaking"));
+  session.on("agent-audio-done", () => onStateChange?.("listening"));
+  session.on("conversation-text", (msg) => {
+    onTranscript?.(msg.role === "user" ? "user" : "assistant", msg.content);
+  });
+  session.on("connected", () => onStateChange?.("listening"));
+  session.on("disconnected", () => onStateChange?.("idle"));
+  session.on("error", (err) => {
+    onStateChange?.("error");
+    onError?.(err.description ?? "Ocurrió un error en la sesión de voz.");
+  });
+  session.on("sdk-error", (err) => {
+    onStateChange?.("error");
+    onError?.(err.message);
+  });
+
+  try {
+    await session.connect();
+    await mic.start();
+  } catch {
+    onStateChange?.("error");
+    onError?.("No se pudo iniciar el micrófono o la conexión de voz.");
+    throw new Error("voice-connect-failed");
+  }
+
+  activeSession = session;
+  activeMic = mic;
+  activePlayer = player;
+
+  return {
+    disconnect: () => disconnectVoice(),
+    mute: () => mic.mute(),
+    unmute: () => mic.unmute(),
+  };
 }
 
 /**
- * Cierra la sesión de voz en tiempo real.
- *
- * TODO (fase de conexión real): cerrar el WebSocket y liberar el micrófono.
+ * Cierra la sesión de voz activa y libera el micrófono y el reproductor.
  */
 export function disconnectVoice(): void {
-  // Sin implementar todavía.
+  activeMic?.stop();
+  activeSession?.disconnect();
+  activePlayer?.dispose();
+  activeMic = null;
+  activeSession = null;
+  activePlayer = null;
 }
 
 /**
- * Transmite un fragmento de audio capturado del micrófono al backend de voz.
- *
- * TODO (fase de conexión real): enviar el chunk de audio (por ejemplo,
- * un Float32Array o Blob) al WebSocket abierto por connectVoice().
+ * Reservado para transmisión manual de fragmentos de audio.
+ * En el flujo actual, AgentMicrophone transmite el audio automáticamente,
+ * así que esta función normalmente no hace falta llamarla directamente.
  */
-export function streamAudio(chunk: unknown): void {
-  void chunk;
-  // Sin implementar todavía.
+export function streamAudio(chunk: ArrayBuffer): void {
+  activeSession?.sendAudio(chunk);
 }
