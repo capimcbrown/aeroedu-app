@@ -1,5 +1,6 @@
 import HeadingTape from "./components/HeadingTape";
 import AttitudeIndicator from "./components/AttitudeIndicator";
+import InstructorAIWidget from "./components/InstructorAI/InstructorAIWidget";
 
 const PROGRAMAS = [
   {
@@ -179,6 +180,8 @@ export default function Home() {
           <span>Educación digital para el gremio aeronáutico</span>
         </div>
       </footer>
+
+      <InstructorAIWidget />
     </div>
   );
 }
