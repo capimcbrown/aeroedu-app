@@ -98,7 +98,7 @@ export async function connectVoice(
     },
   });
 
-  const player = new AgentPlayer();
+  // const player = new AgentPlayer();  // Deshabilitado: solo texto por ahora
   const mic = new AgentMicrophone((data) => session.sendAudio(data));
   session.on("audio", (chunk) => player.queue(chunk));
   session.on("user-started-speaking", () => {
