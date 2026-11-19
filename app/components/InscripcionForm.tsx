@@ -22,6 +22,10 @@ const CURSOS = [
   "Preparación examen Piloto Comercial (PCA)",
   "Preparación examen Piloto Privado",
   "Despachadores",
+  "Curso de tierra Seneca II y III (con certificado)",
+  "CRM aplicado a la línea aérea (sin certificación)",
+  "Mercancías peligrosas (MMPP)",
+  "Medicina aeroespacial (fisiología de vuelo)",
   "Aún no sé, quiero orientación",
 ];
 
