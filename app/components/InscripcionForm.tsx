@@ -32,7 +32,7 @@ const CURSOS = [
 type Estado = "idle" | "enviando" | "ok" | "error";
 
 const inputClass =
-  "w-full rounded-sm border border-panel-border bg-panel px-4 py-3 text-sm outline-none focus:border-brass";
+  "w-full rounded-lg border border-panel-border bg-background/60 px-4 py-3 text-sm outline-none focus:border-brass";
 const labelClass = "mb-1 block text-xs font-medium tracking-wide text-foreground/70";
 
 export default function InscripcionForm() {
@@ -99,7 +99,7 @@ export default function InscripcionForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid grid-cols-1 gap-4 rounded-md border border-panel-border bg-panel/60 p-6 sm:grid-cols-2 sm:p-8"
+      className="grid grid-cols-1 gap-4 rounded-3xl border border-white/10 bg-panel/60 p-6 sm:grid-cols-2 sm:p-10"
     >
       {/* Campo trampa contra spam (oculto para personas) */}
       <input type="text" name="_gotcha" className="hidden" tabIndex={-1} autoComplete="off" />
@@ -158,7 +158,7 @@ export default function InscripcionForm() {
         <button
           type="submit"
           disabled={estado === "enviando"}
-          className="w-full rounded-sm bg-brass px-6 py-3 font-medium text-background transition-colors hover:bg-brass-soft disabled:opacity-60 sm:w-auto"
+          className="gold-gradient w-full rounded-md px-7 py-3.5 font-semibold text-[#0b1220] shadow-[0_10px_30px_-10px_rgba(224,181,99,0.7)] transition-transform hover:-translate-y-0.5 disabled:opacity-60 sm:w-auto"
         >
           {estado === "enviando" ? "Enviando…" : "Quiero inscribirme"}
         </button>
