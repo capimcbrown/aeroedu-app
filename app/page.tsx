@@ -2,6 +2,7 @@ import Image from "next/image";
 import SiteHeader from "./components/SiteHeader";
 import InstructorAIWidget from "./components/InstructorAI/InstructorAIWidget";
 import InscripcionForm from "./components/InscripcionForm";
+import WhatsAppFlotante from "./components/WhatsAppFlotante";
 
 type Ruta = {
   id: string;
@@ -348,12 +349,23 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-xs text-foreground/45 sm:flex-row">
           <span className="font-serif text-base text-foreground/70">Capi McBrown</span>
           <span>@capimcbrown · Educación digital para el gremio aeronáutico</span>
-          <a href="mailto:contacto@capimcbrown.com" className="hover:text-brass-soft">
-            contacto@capimcbrown.com
-          </a>
+          <span className="flex gap-4">
+            <a
+              href="https://wa.me/573167446685"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-brass-soft"
+            >
+              WhatsApp +57 316 744 6685
+            </a>
+            <a href="mailto:contacto@capimcbrown.com" className="hover:text-brass-soft">
+              contacto@capimcbrown.com
+            </a>
+          </span>
         </div>
       </footer>
 
+      <WhatsAppFlotante />
       <InstructorAIWidget />
     </div>
   );
