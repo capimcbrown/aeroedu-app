@@ -299,7 +299,7 @@ export default function TestPCA() {
             <p className="mb-2 font-mono text-[11px] tracking-widest text-steel">
               {MATERIAS[p.s].toUpperCase()} · BANCO N.º {p.id}
             </p>
-            <h2 className="font-display text-xl font-semibold leading-snug sm:text-2xl">{p.q}</h2>
+            <h2 className="whitespace-pre-line font-display text-xl font-semibold leading-snug sm:text-2xl">{p.q}</h2>
 
             <div className="mt-6 space-y-3">
               {p.o.map((opt, i) => {
@@ -336,7 +336,7 @@ export default function TestPCA() {
             {selected !== null && (
               <div className="mt-6 rounded-sm border border-panel-border bg-panel/60 p-4">
                 <p className="font-mono text-xs tracking-widest text-brass">EXPLICACIÓN</p>
-                <p className="mt-2 text-sm leading-relaxed text-foreground/80">{p.e}</p>
+                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-foreground/80">{p.e}</p>
                 <button
                   onClick={handleNext}
                   className="mt-5 rounded-sm bg-brass px-6 py-2.5 font-medium text-background transition-colors hover:bg-brass-soft"
@@ -422,10 +422,10 @@ export default function TestPCA() {
                     <div className="mt-3 space-y-3">
                       {falladas.map(({ pregunta: f, elegida }) => (
                         <div key={f.id} className="rounded-sm border border-panel-border bg-panel/60 p-4 text-sm">
-                          <p className="font-medium leading-snug">{f.q}</p>
+                          <p className="whitespace-pre-line font-medium leading-snug">{f.q}</p>
                           <p className="mt-2 text-alert">✗ Tu respuesta: {f.o[elegida]}</p>
                           <p className="mt-1 text-green-500">✓ Correcta: {f.o[f.a]}</p>
-                          <p className="mt-2 text-xs leading-relaxed text-foreground/70">{f.e}</p>
+                          <p className="mt-2 whitespace-pre-line text-xs leading-relaxed text-foreground/70">{f.e}</p>
                         </div>
                       ))}
                     </div>
