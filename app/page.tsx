@@ -1,6 +1,7 @@
 import HeadingTape from "./components/HeadingTape";
 import AttitudeIndicator from "./components/AttitudeIndicator";
 import InstructorAIWidget from "./components/InstructorAI/InstructorAIWidget";
+import InscripcionForm from "./components/InscripcionForm";
 
 const PROGRAMAS = [
   {
@@ -170,6 +171,24 @@ export default function Home() {
             >
               Escribir por WhatsApp
             </a>
+          </div>
+        </section>
+        {/* INSCRIPCIÓN CURSOS VIRTUALES */}
+        <section id="inscripcion" className="border-t border-panel-border px-6 py-20">
+          <div className="mx-auto max-w-4xl">
+            <p className="font-mono text-xs tracking-[0.3em] text-brass">
+              INSCRIPCIÓN · CURSOS VIRTUALES
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+              ¿Te interesa un curso virtual?
+            </h2>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-foreground/65">
+              Déjanos tus datos y el curso que te interesa. Te enviamos la
+              información de fechas, contenido e inscripción.
+            </p>
+            <div className="mt-10">
+              <InscripcionForm />
+            </div>
           </div>
         </section>
       </main>
