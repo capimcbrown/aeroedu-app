@@ -4,9 +4,10 @@ import { useState } from "react";
 
 const LINKS = [
   { deg: "000", label: "Inicio", href: "#inicio" },
-  { deg: "090", label: "Cursos", href: "#cursos" },
-  { deg: "180", label: "Método", href: "#metodo" },
-  { deg: "270", label: "Contacto", href: "#contacto" },
+  { deg: "072", label: "Tests", href: "#tests" },
+  { deg: "144", label: "Cursos", href: "#cursos" },
+  { deg: "216", label: "Método", href: "#metodo" },
+  { deg: "288", label: "Contacto", href: "#contacto" },
 ];
 
 export function LogoCapi({ className = "" }: { className?: string }) {

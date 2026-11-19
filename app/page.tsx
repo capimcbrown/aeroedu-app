@@ -219,6 +219,51 @@ export default function Home() {
           </div>
         </section>
 
+        {/* TESTS GRATUITOS */}
+        <section id="tests" className="scroll-mt-24 px-6 pt-20">
+          <div className="mx-auto max-w-6xl">
+            <p className="font-mono text-xs tracking-[0.3em] text-brass">TESTS GRATUITOS</p>
+            <h2 className="mt-3 max-w-2xl font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
+              Pon a prueba <em className="gold-text italic">lo que sabes</em>
+            </h2>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-foreground/65">
+              Preguntas tipo examen con corrección y explicación inmediata en cada respuesta.
+            </p>
+
+            <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+              {[
+                {
+                  href: "/test-aerodinamica",
+                  rol: "TRIPULANTES DE CABINA",
+                  titulo: "Test de Aerodinámica TCP",
+                  detalle: "43 preguntas · nota sobre 100 · aprueba con 80",
+                },
+                {
+                  href: "/test-pca",
+                  rol: "PILOTOS",
+                  titulo: "Test PCA — Piloto Comercial",
+                  detalle: "457 preguntas · 9 materias · simulacro de 50",
+                },
+              ].map((t) => (
+                <a
+                  key={t.href}
+                  href={t.href}
+                  className="group relative flex items-center justify-between gap-6 overflow-hidden rounded-3xl border border-brass/30 bg-gradient-to-br from-panel to-background p-7 transition-colors hover:border-brass/70 sm:p-9"
+                >
+                  <div>
+                    <p className="font-mono text-[11px] tracking-[0.3em] text-brass">{t.rol}</p>
+                    <h3 className="mt-2 font-serif text-2xl font-semibold sm:text-3xl">{t.titulo}</h3>
+                    <p className="mt-2 text-sm text-foreground/60">{t.detalle}</p>
+                  </div>
+                  <span className="gold-gradient flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl text-[#0b1220] shadow-[0_10px_30px_-10px_rgba(224,181,99,0.7)] transition-transform group-hover:translate-x-1">
+                    →
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* RUTAS / CURSOS */}
         <section id="cursos" className="scroll-mt-24 px-6 py-20">
           <div className="mx-auto max-w-6xl">
