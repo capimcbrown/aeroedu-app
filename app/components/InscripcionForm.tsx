@@ -16,17 +16,68 @@ const PERFILES = [
   "Otro",
 ];
 
-const CURSOS = [
-  "Aerodinámica para TCP",
-  "Derecho Aéreo para TCP",
-  "Preparación examen Piloto Comercial (PCA)",
-  "Preparación examen Piloto Privado",
-  "Despachadores",
-  "Curso de tierra Seneca II y III (con certificado)",
-  "CRM aplicado a la línea aérea (sin certificación)",
-  "Mercancías peligrosas (MMPP)",
-  "Medicina aeroespacial (fisiología de vuelo)",
-  "Aún no sé, quiero orientación",
+// Cursos agrupados por rol, según los módulos teóricos de los cursos iniciales del RAC 141
+// (Ap. 1 y 2 pilotos, Ap. 7 despachadores, Ap. 8 TCP). No incluye ditching, evacuación ni inglés técnico.
+const CURSOS: { grupo: string; cursos: string[] }[] = [
+  {
+    grupo: "Pilotos (privado y comercial)",
+    cursos: [
+      "Preparación examen Piloto Comercial (PCA)",
+      "Preparación examen Piloto Privado (PPA)",
+      "Curso de tierra Seneca II y III (con certificado)",
+      "Transición a aerolínea",
+      "Derecho aéreo",
+      "Principios de vuelo (aerodinámica)",
+      "Conocimiento general de las aeronaves",
+      "Performance y planificación de vuelo",
+      "Meteorología",
+      "Navegación",
+      "Procedimientos operacionales",
+      "Factores humanos – actuación humana",
+      "Comunicaciones aeronáuticas – radiotelefonía",
+    ],
+  },
+  {
+    grupo: "Despachadores de vuelo",
+    cursos: [
+      "Derecho aéreo",
+      "Aerodinámica y teoría de vuelo",
+      "Conocimiento general de las aeronaves",
+      "Peso y balance",
+      "Cálculo de performance y planificación de vuelo",
+      "Meteorología",
+      "Navegación",
+      "Procedimientos operacionales",
+      "Comunicaciones aeronáuticas",
+      "Actuación humana – factores humanos",
+      "Seguridad aérea",
+    ],
+  },
+  {
+    grupo: "Tripulantes de cabina (TCP)",
+    cursos: [
+      "Derecho aéreo",
+      "Aerodinámica básica",
+      "Meteorología básica",
+      "Obligaciones y responsabilidades",
+      "Mercancías peligrosas (MMPP)",
+      "Actuación humana",
+      "Supervivencia (teórico)",
+      "Medicina aeroespacial (fisiología de vuelo) y primeros auxilios",
+      "Prevención de accidentes",
+      "Seguridad de la aviación (AVSEC)",
+      "Temas operacionales generales",
+      "Procedimientos de emergencia y coordinación de la tripulación",
+      "Familiarización con los equipos de emergencia",
+    ],
+  },
+  {
+    grupo: "Para todos los roles",
+    cursos: [
+      "CRM aplicado a la línea aérea (sin certificación)",
+      "Aún no sé, quiero orientación",
+    ],
+  },
 ];
 
 type Estado = "idle" | "enviando" | "ok" | "error";
@@ -137,8 +188,14 @@ export default function InscripcionForm() {
           <option value="" disabled>
             Selecciona un curso
           </option>
-          {CURSOS.map((c) => (
-            <option key={c}>{c}</option>
+          {CURSOS.map((g) => (
+            <optgroup key={g.grupo} label={g.grupo}>
+              {g.cursos.map((c) => (
+                <option key={`${g.grupo}-${c}`} value={`${c} — ${g.grupo}`}>
+                  {c}
+                </option>
+              ))}
+            </optgroup>
           ))}
         </select>
       </div>

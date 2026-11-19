@@ -19,8 +19,9 @@ const RUTAS: Ruta[] = [
     imgPos: "object-[60%_50%]",
     enlaces: [
       { texto: "Test PCA · 457 preguntas", href: "/test-pca" },
-      { texto: "Curso de tierra Seneca II y III" },
-      { texto: "Preparación examen piloto comercial y privado" },
+      { texto: "Curso de tierra Seneca II y III (con certificado)" },
+      { texto: "Transición a aerolínea" },
+      { texto: "Materias PPA y PCA: aerodinámica, derecho aéreo y más" },
     ],
   },
   {
@@ -31,16 +32,16 @@ const RUTAS: Ruta[] = [
     enlaces: [
       { texto: "Test de Aerodinámica TCP", href: "/test-aerodinamica" },
       { texto: "Aerodinámica · Derecho Aéreo" },
-      { texto: "Mercancías peligrosas · Fisiología de vuelo" },
+      { texto: "Mercancías peligrosas · Medicina aeroespacial" },
     ],
   },
   {
     id: "despachadores",
     titulo: "Despachadores",
     enlaces: [
-      { texto: "Planificación de vuelo y performance" },
-      { texto: "Meteorología aeronáutica" },
-      { texto: "Regulación aplicada · CRM" },
+      { texto: "Peso y balance · Performance y planificación" },
+      { texto: "Meteorología · Navegación" },
+      { texto: "Derecho aéreo · Procedimientos operacionales" },
     ],
   },
 ];
